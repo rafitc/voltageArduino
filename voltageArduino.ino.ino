@@ -1,11 +1,12 @@
+
 double sensorValue ;
 int avg = 0;
 int led = 13;
 int flag = 0;
 float findVolt();
 float volt;
-int previousMillis = 0;
-const long interval = 2000;
+unsigned long previousMillis = 0;
+const long interval = 4000;
 
 
 void setup() {
@@ -18,7 +19,7 @@ void setup() {
 void loop() {
 
   volt = findVolt();
-  unsigned long currentMillis = millis();
+  
   if (volt >= 0.17) {
     Serial.println("Over volt ");
     digitalWrite(led, 0);
@@ -34,17 +35,18 @@ void loop() {
 
   else {
     //previousMillis = currentMillis;
-
+    unsigned long currentMillis = millis();
+    previousMillis = currentMillis;
     Serial.println("  SAfe Level");
     //    Serial.println(currentMillis);
 
     if (currentMillis - previousMillis >= interval) {
       previousMillis = currentMillis;
       Serial.println("Timer RESET");
-    
-    //digitalWrite(led, HIGH);
-    
+      digitalWrite(led, HIGH);
+      
   }
+  
 }
 }
 float findVolt() {
@@ -57,6 +59,7 @@ float findVolt() {
   avg = avg / 500;
   double volt = avg * (5.0 / 1023.0);
   Serial.println(volt);
+//  delay(100);
   return volt;
 }
 
